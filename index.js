@@ -14,12 +14,12 @@ const app = express();
 // ---------- Middlewares ----------
 app.use(express.json());
 
-// Allow CORS from frontend (both localhost and deployed)
+// Allow CORS from frontend (local + deployed)
 app.use(
   cors({
     origin: [
-      "http://localhost:5173", // your local frontend
-      "https://fools-fortune-rqzq.vercel.app/" // <-- replace with your deployed frontend URL
+      "http://localhost:5173", // local frontend
+      "https://fools-fortune-rqzq.vercel.app" // deployed frontend (no trailing slash)
     ],
     credentials: true, // allow cookies if needed
   })
