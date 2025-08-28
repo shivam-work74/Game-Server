@@ -14,27 +14,28 @@ const app = express();
 // ---------- Middlewares ----------
 app.use(express.json());
 
+// Allowed origins (frontend + portfolio)
 const allowedOrigins = [
-  "http://localhost:5173", // local frontend
-  "https://fools-fortune-rqzq.vercel.app" // deployed frontend
+  "http://localhost:5173",              // local frontend
+  "https://fools-fortune-rqzq.vercel.app", // deployed frontend
+  "https://shivam-portfolio.vercel.app"    // portfolio
 ];
 
 // CORS middleware
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-
-  // Preflight request
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-  next();
-});
+app.use(cors({
+  origin: function(origin, callback) {
+    // allow requests with no origin (like Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = "The CORS policy for this site does not allow access from the specified Origin.";
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(helmet());
 app.use(cookieParser());
