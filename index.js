@@ -11,18 +11,38 @@ dotenv.config();
 
 const app = express();
 
-// Middlewares
+// ---------- Middlewares ----------
 app.use(express.json());
-app.use(cors());
+
+// Allow CORS from frontend (both localhost and deployed)
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173", // your local frontend
+      "https://your-frontend.vercel.app" // change to your deployed frontend URL
+    ],
+    credentials: true,
+  })
+);
+
 app.use(helmet());
 app.use(cookieParser());
 
-// Routes
+// ---------- Routes ----------
+app.get("/", (req, res) => {
+  res.send("✅ Game Server is running!");
+});
+
 app.use("/api/auth", authRoutes);
 
-// MongoDB connection
+// ---------- MongoDB ----------
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/game-db";
+const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+  console.error("❌ Missing MONGO_URI in environment variables!");
+  process.exit(1);
+}
 
 mongoose
   .connect(MONGO_URI)
