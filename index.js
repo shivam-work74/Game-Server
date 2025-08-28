@@ -14,16 +14,22 @@ const app = express();
 // ---------- Middlewares ----------
 app.use(express.json());
 
-// Allow CORS from frontend (local + deployed)
+const allowedOrigins = [
+  "http://localhost:5173", // local frontend
+  "https://fools-fortune-rqzq.vercel.app" // deployed frontend
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173", // local frontend
-      "https://fools-fortune-rqzq.vercel.app" // deployed frontend (no trailing slash)
-    ],
-    credentials: true, // allow cookies if needed
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
+
+// Handle preflight requests for all routes
+app.options("*", cors());
 
 app.use(helmet());
 app.use(cookieParser());
