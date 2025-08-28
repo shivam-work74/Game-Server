@@ -19,7 +19,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173", // your local frontend
-      "https://your-frontend.vercel.app" // <-- replace with your deployed frontend URL
+      "https://game-server-z47n.onrender.com" // <-- replace with your deployed frontend URL
     ],
     credentials: true, // allow cookies if needed
   })
