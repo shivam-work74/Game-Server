@@ -18,7 +18,7 @@ app.use(express.json());
 const allowedOrigins = [
   "http://localhost:5173",              // local frontend
   "https://fools-fortune-rqzq.vercel.app", // deployed frontend
-  "https://shivam-portfolio.vercel.app"    // portfolio
+  "https://fools-fortune-rqzq.vercel.app"    // portfolio
 ];
 
 // CORS middleware
